@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from argon2.exceptions import VerifyMismatchError
 from database import engine, User
 from A1 import ph
-import A3 as A3
+import A3 
 
 
 def verify_login(email, password):

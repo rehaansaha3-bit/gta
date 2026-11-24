@@ -8,6 +8,7 @@ from database import engine, User
 ACCESS_TOKEN_EXPIRY = 15
 REFRESH_TOKEN_EXPIRY = 7 * 24 * 60
 SECRET_KEY = os.getenv("SECRET_KEY") or "local-dev-key"
+# instead of using secret key directly, it is better to use environment variables for security reasons.
 ALGORITHM = "HS256"
 
 
