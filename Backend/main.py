@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from A1 import register_player
 from A2 import verify_login
 from A3 import refresh_access_token
+from E1 import create_mission_manager
 
 app = FastAPI()
 
@@ -67,3 +68,21 @@ def refresh(data: RefreshRequest):
 
     return {"access_token": result}
 
+class ManagerRequest(BaseModel):
+    username: str
+    email: str
+    password: str
+
+@app.post("/admin/mission-managers")
+def create_manager(data: ManagerRequest):
+
+    result = create_mission_manager(
+        data.username,
+        data.email,
+        data.password
+    )
+
+    if result == False:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    return {"message": "Mission manager created successfully"}
