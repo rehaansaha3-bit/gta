@@ -37,6 +37,7 @@ class PlayerMission(Base):
     player_id = Column(Integer, ForeignKey("users.id"))
     mission_id = Column(Integer, ForeignKey("missions.id"))
     status = Column(String, default="accepted")
+    completion_details = Column(String)
 
 
 

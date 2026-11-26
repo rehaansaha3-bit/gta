@@ -13,6 +13,7 @@ from E3 import get_available_missions
 from E4 import get_mission_by_id
 from E5 import accept_mission
 from E6 import get_accepted_missions
+from E7 import submit_completion
 app = FastAPI()
 
 
@@ -222,3 +223,43 @@ def my_missions(access_token: str):
     missions = get_accepted_missions(player_id)
 
     return {"missions": missions}
+
+
+# E7 - submit mission completion
+
+class CompletionRequest(BaseModel):
+    access_token: str
+    completion_details: str
+
+
+@app.post("/missions/{mission_id}/complete")
+def complete_mission(mission_id: int, data: CompletionRequest):
+
+    email = verify_token(data.access_token, "access")
+
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    session = Session(engine)
+    user = session.query(User).filter_by(email=email).first()
+
+    if user is None or user.role != "player":
+        session.close()
+        raise HTTPException(status_code=403, detail="Only players can submit completion")
+
+    player_id = user.id
+    session.close()
+
+    result = submit_completion(
+        player_id,
+        mission_id,
+        data.completion_details
+    )
+
+    if result == False:
+        raise HTTPException(
+            status_code=400,
+            detail="You have not accepted this mission"
+        )
+
+    return {"message": "Mission completion submitted successfully"}
