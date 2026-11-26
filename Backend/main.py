@@ -10,6 +10,7 @@ from database import engine, User
 from A3 import verify_token
 from E2 import create_mission
 from E3 import get_available_missions
+from E4 import get_mission_by_id
 app = FastAPI()
 
 
@@ -146,3 +147,16 @@ def get_missions():
     missions = get_available_missions()
 
     return {"missions": missions}
+
+
+# E4 Get mission details
+
+@app.get("/missions/{mission_id}")
+def get_mission(mission_id: int):
+
+    mission = get_mission_by_id(mission_id)
+
+    if mission is None:
+        raise HTTPException(status_code=404, detail="Mission not found")
+
+    return mission
