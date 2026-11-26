@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from database import engine, User
 from A3 import verify_token
 from E2 import create_mission
+from E3 import get_available_missions
 app = FastAPI()
 
 
@@ -136,3 +137,12 @@ def add_mission(data: MissionRequest):
         "message": "Mission created successfully",
         "mission_id": mission_id
     }
+
+#E3-Get all available missions
+
+@app.get("/missions")
+def get_missions():
+
+    missions = get_available_missions()
+
+    return {"missions": missions}
