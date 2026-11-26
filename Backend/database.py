@@ -1,5 +1,5 @@
 
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base
 
 engine = create_engine("sqlite:///./gta.db")
@@ -15,6 +15,19 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, default="player")
+
+
+class Mission(Base):
+    __tablename__ = "missions"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    difficulty = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    reward = Column(Integer, nullable=False)
+    manager_id = Column(Integer, ForeignKey("users.id"))
+    is_available = Column(Integer, default=1)
 
 
 Base.metadata.create_all(engine)
