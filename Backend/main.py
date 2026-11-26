@@ -12,6 +12,7 @@ from E2 import create_mission
 from E3 import get_available_missions
 from E4 import get_mission_by_id
 from E5 import accept_mission
+from E6 import get_accepted_missions
 app = FastAPI()
 
 
@@ -198,3 +199,26 @@ def accept(mission_id: int, data: AcceptMissionRequest):
 
     return {"message": "Mission accepted successfully"}
 
+
+# E6 - get accepted missions
+@app.get("/players/me/missions")
+def my_missions(access_token: str):
+
+    email = verify_token(access_token, "access")
+
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    session = Session(engine)
+    user = session.query(User).filter_by(email=email).first()
+
+    if user is None or user.role != "player":
+        session.close()
+        raise HTTPException(status_code=403, detail="Only players can view their missions")
+
+    player_id = user.id
+    session.close()
+
+    missions = get_accepted_missions(player_id)
+
+    return {"missions": missions}
