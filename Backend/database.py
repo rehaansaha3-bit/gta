@@ -30,4 +30,14 @@ class Mission(Base):
     is_available = Column(Integer, default=1)
 
 
+class PlayerMission(Base):
+    __tablename__ = "player_missions"
+
+    id = Column(Integer, primary_key=True)
+    player_id = Column(Integer, ForeignKey("users.id"))
+    mission_id = Column(Integer, ForeignKey("missions.id"))
+    status = Column(String, default="accepted")
+
+
+
 Base.metadata.create_all(engine)

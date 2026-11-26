@@ -11,6 +11,7 @@ from A3 import verify_token
 from E2 import create_mission
 from E3 import get_available_missions
 from E4 import get_mission_by_id
+from E5 import accept_mission
 app = FastAPI()
 
 
@@ -160,3 +161,40 @@ def get_mission(mission_id: int):
         raise HTTPException(status_code=404, detail="Mission not found")
 
     return mission
+
+# E5 - Accept Mission
+class AcceptMissionRequest(BaseModel):
+    access_token: str
+
+
+@app.post("/missions/{mission_id}/accept")
+def accept(mission_id: int, data: AcceptMissionRequest):
+
+    email = verify_token(data.access_token, "access")
+
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    session = Session(engine)
+    user = session.query(User).filter_by(email=email).first()
+
+    if user is None or user.role != "player":
+        session.close()
+        raise HTTPException(status_code=403, detail="Only players can accept missions")
+
+    player_id = user.id
+    session.close()
+
+    result = accept_mission(player_id, mission_id)
+
+    if result == "not_found":
+        raise HTTPException(status_code=404, detail="Mission not found")
+
+    if result == "unavailable":
+        raise HTTPException(status_code=400, detail="Mission is not available")
+
+    if result == "already_accepted":
+        raise HTTPException(status_code=400, detail="Mission already accepted")
+
+    return {"message": "Mission accepted successfully"}
+
