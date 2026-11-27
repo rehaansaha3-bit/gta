@@ -23,8 +23,6 @@ Administrators manage the platform, while mission managers create missions and v
 |---|---|
 | Rehaan Saha | Backend Developer |
 
-*This project is being implemented individually.*
-
 ## 3. Live Application
 
 **API Base URL:** `http://YOUR_EC2_PUBLIC_IP:8001`
@@ -177,8 +175,8 @@ GitHub Secrets are used to securely store Docker Hub credentials and EC2 SSH acc
 | A1 – Player Registration | Completed |
 | A2 – Login | Completed |
 | A3 – Refresh Token | Completed |
-| E1 – Create Mission Manager | In Progress |
-| E2–E15 – Project APIs | Pending |
+| E1 – Create Mission Manager | Completed |
+| E2–E7 – Project APIs | Completed |
 | Docker Setup | Completed |
 | AWS EC2 Deployment | Completed |
 | GitHub Actions CI/CD | Configured |
