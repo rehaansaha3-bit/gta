@@ -90,19 +90,9 @@ The application contains 18 APIs: 3 authentication APIs and 15 project-specific 
 | E2 | POST | `/missions` | Mission Manager | Create a new mission |
 | E3 | GET | `/missions` | All | Get all available missions |
 | E4 | GET | `/missions/{mission_id}` | All | Get details of a mission |
-| E5 | PATCH | `/missions/{mission_id}` | Mission Manager | Update mission details or availability |
-| E6 | POST | `/missions/{mission_id}/accept` | Player | Accept a mission |
-| E7 | GET | `/players/me/missions` | Player | Get accepted missions |
-| E8 | POST | `/missions/{mission_id}/complete` | Player | Submit mission completion details |
-| E9 | PATCH | `/completions/{completion_id}/review` | Mission Manager | Approve or reject completion |
-| E10 | GET | `/players/me/history` | Player | Get completed mission history |
-| E11 | POST | `/rewards` | Mission Manager | Create a reward |
-| E12 | GET | `/rewards` | All | Get available rewards |
-| E13 | POST | `/rewards/assign` | Mission Manager | Assign a reward to a player |
-| E14 | GET | `/leaderboard` | All | Get player rankings |
-| E15 | GET | `/players/{player_id}/profile` | All | Get player profile and statistics |
-
-*The project-specific endpoint paths and HTTP methods are the proposed API design for this project.*
+| E5 | POST | `/missions/{mission_id}/accept` | Player | Accept a mission |
+| E6 | GET | `/players/me/missions` | Player | Get accepted missions |
+| E7 | POST | `/missions/{mission_id}/complete` | Player | Submit mission completion details |
 
 ## 6. User Roles
 
@@ -115,19 +105,17 @@ The application contains 18 APIs: 3 authentication APIs and 15 project-specific 
 New registrations receive the player role by default. Only admins can create mission manager accounts.
 
 ## 7. Database Design
+The application uses SQLite for storing application data. SQLAlchemy is used to interact with the database.
 
-The application uses SQLite for storing application data.
-
-Planned database tables:
+The project currently uses three database tables:
 
 | Table | Purpose |
 |---|---|
-| users | Store user details, passwords and roles |
-| missions | Store mission details and availability |
-| player_missions | Store missions accepted by players |
-| completions | Store submitted mission completion details |
-| rewards | Store mission rewards |
-| player_rewards | Store rewards assigned to players |
+| `users` | Stores user details, passwords and roles. |
+| `missions` | Stores mission details, difficulty, location and availability. |
+| `player_missions` | Stores missions accepted by players and their status. |
+
+These tables support user management, mission creation and player mission acceptance.
 
 ## 8. Reward System
 
